@@ -43,21 +43,11 @@ public:
         temp->next = newNode;
         length++;
     }
-
     void addhead(T *value) {
         Node<T> *newNode = new Node<T>(value);
         newNode->next = head;
         head = newNode;
         length++;
-    }
-    Node<T> *get(int index) {
-        if (index < 0 || index >= length)
-            return nullptr;
-        Node<T> * temp = head;
-        for (int i = 0; i < index; i++) {
-            temp = temp -> next;
-            return temp;
-        }
     }
     void delfirst() {
         Node<T> *temp = head;
@@ -65,13 +55,21 @@ public:
         delete temp;
         length--;
     }
-
     void dellast() {
         Node<T> *temp = head;
         while (temp->next!=NULL)
             temp = temp->next;
         delete temp;
         length--;
+    }
+    Node<T> *get(int index) {
+        if (index < 0 || index >= length)
+            return nullptr;
+        Node<T> * temp = head;
+        for (int i = 0; i < index; i++) {
+            temp = temp -> next;
+        }
+        return temp;
     }
 
     void deleteNode(int index) {
@@ -82,40 +80,37 @@ public:
         }
         if (index == 0) {
             delfirst();
+            return;
         }
-        if (index == length -1) {
+        if (index == length - 1) {
             dellast();
+            return;
         }
-        else {
-            Node<T> * temp = get(index - 1);
-            Node<T> *toDelete = temp -> next;
-            temp->next = toDelete->next;
-            delete toDelete;
-            length--;
-        }
-        return;
+        Node<T> *temp = head;
+        Node<T> *toDelete = temp->next;
+        temp->next = temp->next->next;
+        delete toDelete;
+        length--;
     }
 
    void insert(int index, T *value) {
         //TODO:Write a function to insert a new node at a give index. Reuse the pre-written functions for edge cases. Account for missing index
-        if (index < 0 || index >= length) {
+        if (index < 0 || index > length) {
             cout<<"index is invalid"<<endl;
             return;
         }
         if (index == 0) {
             addhead(value);
+            return;
         }
-        if (index == length) {
-            add(value);
+        Node<T> *newNode = new Node<T>(value);
+        Node<T> *temp = head;
+        for (int i = 0; i < index - 1; i++) {
+            temp = temp->next;
         }
-        else {
-            Node<T> *newNode = new Node<T>(value);
-            Node<T> * temp = get(index - 1);
-            newNode-next=temp->next;
-            temp->next = newNode;
-            length++;
-        }
-        return;
+        newNode->next = temp->next;
+        temp->next = newNode;
+        length++;
     }
 
    void reverselist(){
@@ -149,15 +144,25 @@ int main() {
     student *s2 = new student("B", 21);
     student *s3 = new student("C", 22);
     LinkedList<student> *ll = new LinkedList<student>(s1);
+
+    cout << "adding" << endl;
     ll->add(s2);
     ll->addhead(s3);
     ll->print();
+
+    cout << "deleting first" << endl;
     ll->delfirst();
     ll->print();
+
+    cout << "deleting last" << endl;
     ll->dellast();
-    ll->print();
+    // ll->print();
+
+    cout << "deleteNode" << endl;
     ll->deleteNode(1);
     ll->print();
+
+    cout << "reversing" << endl;
     ll->reverselist();
     ll->print();
 
