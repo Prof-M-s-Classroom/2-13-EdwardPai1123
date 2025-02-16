@@ -95,22 +95,24 @@ public:
 
    void insert(int index, T *value) {
         //TODO:Write a function to insert a new node at a give index. Reuse the pre-written functions for edge cases. Account for missing index
-        if (index < 0 || index > length) {
+        if (index < 0 || index >= length) {
             cout<<"index is invalid"<<endl;
             return;
         }
         if (index == 0) {
             addhead(value);
-            return;
         }
-        Node<T> *newNode = new Node<T>(value);
-        Node<T> *temp = head;
-        for (int i = 0; i < index - 1; i++) {
-            temp = temp->next;
+        if (index == length) {
+            add(value);
         }
-        newNode->next = temp->next;
-        temp->next = newNode;
-        length++;
+        else {
+            Node<T> *newNode = new Node<T>(value);
+            Node<T> * temp = get(index - 1);
+            newNode-next=temp->next;
+            temp->next = newNode;
+            length++;
+        }
+        return;
     }
 
    void reverselist(){
@@ -162,7 +164,6 @@ int main() {
     ll->deleteNode(1);
     ll->print();
 
-    cout << "reversing" << endl;
     ll->reverselist();
     ll->print();
 
